@@ -59,3 +59,33 @@ body {
   color: rgba(255, 255, 255, 0.9);
   font-size: 2.2rem;
 }
+
+/* Header */
+
+.title {
+  color: rgba(255, 255, 255, 0.89);
+  text-align: center;
+  margin: 1rem;
+}
+
+.title > span {
+  color: rgb(228, 228, 28);
+}
+
+.footer-text {
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  margin-top: 1.8rem;
+  font-size: 1.2rem;
+}
+
+.footer-text > a {
+  text-decoration: none;
+  color: inherit;
+  transition: 200ms;
+}
+
+.footer-text > a:hover {
+  color: white;
+  transition: 200ms;
+}
