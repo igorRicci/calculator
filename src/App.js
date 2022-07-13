@@ -15,6 +15,13 @@ export const ACTIONS = {
 const reducer = (state, {type, payload}) => {
   switch(type) {
     case ACTIONS.ADD_DIGIT:
+      if (state.overwrite) {
+        return {
+          ...state,
+          currentOperand: payload.digit,
+          overwrite: false
+        }
+      }
       if (payload.digit === "0" && state.currentOperand === "0") {
         return state
       }
@@ -60,8 +67,13 @@ const reducer = (state, {type, payload}) => {
       return {}
 
     case ACTIONS.EVALUATE:
+      if (state.operation == null || state.currentOperand == null || state.previousOperand == null) {
+        return state
+      }
+
       return {
-        // ...state,
+        ...state,
+        overwrite: true,
         currentOperand: evaluate(state),
         previousOperand: null,
         operation: null
