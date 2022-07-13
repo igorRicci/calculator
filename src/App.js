@@ -27,9 +27,17 @@ const reducer = (state, {type, payload}) => {
         ...state,
         currentOperand: `${state.currentOperand || ""}${payload.digit}`
       }
+
     case ACTIONS.CHOOSE_OPERATION:
       if (state.currentOperand == null && state.previousOperand == null) {
         return state
+      }
+
+      if (state.currentOperand == null) {
+        return {
+          ...state,
+          operation: payload.operation
+        }
       }
 
       if (state.previousOperand == null) {
@@ -40,9 +48,49 @@ const reducer = (state, {type, payload}) => {
           currentOperand: null
         }
       }
+
+      return {
+        ...state,
+        previousOperand: evaluate(state),
+        operation: payload.operation,
+        currentOperand: null
+      }
+
     case ACTIONS.CLEAR:
       return {}
+
+    case ACTIONS.EVALUATE:
+      return {
+        // ...state,
+        currentOperand: evaluate(state),
+        previousOperand: null,
+        operation: null
+      }
   }
+}
+
+const evaluate = ({ currentOperand, previousOperand, operation }) => {
+  const prev = parseFloat(previousOperand)
+  const curr = parseFloat(currentOperand)
+  if (isNaN(prev) || isNaN(curr)) {
+    return ""
+  }
+  let computation = ""
+  switch (operation) {
+    case "+":
+      computation = prev + curr
+      break
+    case "-":
+      computation = prev - curr
+      break
+    case "*":
+      computation = prev * curr
+      break
+    case "÷":
+      computation = prev / curr
+      break
+  }
+  return computation.toString()
 }
 
 function App() {
@@ -71,7 +119,7 @@ function App() {
       <OperationButton operation="-" dispatch={dispatch} />
       <DigitButton digit="." dispatch={dispatch} />
       <DigitButton digit="0" dispatch={dispatch} />
-      <button className="span-two">=</button>
+      <button className="span-two" onClick={() => dispatch({ type: ACTIONS.EVALUATE })}>=</button>
     </div>
   )
 }
